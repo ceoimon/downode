@@ -1,0 +1,9 @@
+.DS_Store
+.coveralls.yml
+.vscode
+*.log
+node_modules
+lib
+es
+coverage
+TODO
