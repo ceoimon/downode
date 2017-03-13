@@ -166,7 +166,7 @@ export function initRefVar() {
 
 				if (p.startsWith('.')) {
 					const backSteps = Math.floor(p.length / 2);
-					enteredPagePathsCopy = enteredPagePaths.slice(0, -backSteps);
+					enteredPagePathsCopy = enteredPagePathsCopy.slice(0, -backSteps);
 					continue;
 				}
 
