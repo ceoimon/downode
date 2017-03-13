@@ -96,6 +96,8 @@ export default async function downode(url, rootPageRule, options) {
 
 	const {$: $root, baseUrl} = await entryFetch(url, globalOptions.fetchOptions);
 
+	let retryCount = 0;
+
 	// closure a Promise for handy reject.
 	return new Promise((resolve, reject) => {
 		const handlePageRule = makeHandlePageRule(baseUrl, globalOptions.defaultGlobalPriority);
@@ -187,6 +189,7 @@ export default async function downode(url, rootPageRule, options) {
 
 								if (!isString(values[i]) || values[i].trim() === '') {
 									ruleData[i].ERROR = new Error(`request url("${values[i]}") failed: is not a valid URL`);
+									errorLog(`${bgRed.black(' FAILED ')}${white(` URL: "${values[i]}"\n	request failed, is not a valid URL`)}`);
 									return;
 								}
 
@@ -201,6 +204,7 @@ export default async function downode(url, rootPageRule, options) {
 
 								if (!isString(values[i]) || values[i].trim() === '') {
 									ruleData[i].ERROR = new Error(`download url("${values[i]}") failed: is not a valid URL`);
+									errorLog(`${bgRed.black(' FAILED ')}${white(` URL: "${values[i]}"\n	request failed, is not a valid URL`)}`);
 									return;
 								}
 
@@ -233,6 +237,7 @@ export default async function downode(url, rootPageRule, options) {
 					if (newPageRule) {
 						if (!isString(value) || value.trim() === '') {
 							ruleData.ERROR = new Error(`request url("${value}") failed: is not a valid URL`);
+							errorLog(`${bgRed.black(' FAILED ')}${white(` URL: "${value}"\n	request failed, is not a valid URL`)}`);
 							return end();
 						}
 
@@ -241,6 +246,7 @@ export default async function downode(url, rootPageRule, options) {
 					} else if (download) {
 						if (!isString(value) || value.trim() === '') {
 							ruleData.ERROR = new Error(`download url("${value}") failed: is not a valid URL`);
+							errorLog(`${bgRed.black(' FAILED ')}${white(` URL: "${value}"\n	request failed, is not a valid URL`)}`);
 							return end();
 						}
 
@@ -280,11 +286,14 @@ export default async function downode(url, rootPageRule, options) {
 							let retryTime = retry;
 							function tryRetry() {
 								if (retryTime-- > 0) {
-									globalOptions.addTask(globalDone => {
-										setTimeout(() => {
-											addTask(task(globalDone), priority);
-										}, retryTimeout);
-									}, globalPriority);
+									retryCount++;
+
+									setTimeout(() => {
+										globalOptions.addTask(globalDone => {
+											retryCount--;
+											addTask(task(globalDone, true), priority);
+										}, globalPriority);
+									}, retryTimeout);
 									return true;
 								}
 								return false;
@@ -300,7 +309,7 @@ export default async function downode(url, rootPageRule, options) {
 						}) => {
 							const newPagePath = index === undefined ? [...pagePath, ruleName] : [...pagePath, `${ruleName}[${index}]`];
 
-							return globalDone => done => {
+							return (globalDone, isRetry) => done => {
 								if (index === undefined) {
 									pageData[ruleName][__URL__] = requestUrl;
 								} else {
@@ -309,11 +318,16 @@ export default async function downode(url, rootPageRule, options) {
 
 								const request = Object.assign({}, setUserAgentAndCookie(fetchOptions), {method: 'GET'});
 
-								infoLog(`${bgGreen.black(' FETCH ')}${white(` ${requestUrl}`)}`);
+								if (isRetry) {
+									warnLog(`${bgYellow.black(' RETRY ')}${white(` URL: "${requestUrl}"`)}`);
+								} else {
+									infoLog(`${bgGreen.black(' FETCH ')}${white(` URL: "${requestUrl}"`)}`);
+								}
+
 								fetch(requestUrl, request)
 									.then(res => {
 										if (res.ok) {
-											infoLog(`${bgGreen.black(' OK ')}${white(` ${requestUrl}`)}`);
+											infoLog(`${bgGreen.black(' OK ')}${white(` URL: "${requestUrl}"`)}`);
 											return res;
 										}
 
@@ -321,7 +335,6 @@ export default async function downode(url, rootPageRule, options) {
 											throw new Error(res.statusText);
 										}
 
-										warnLog(`${bgYellow.black(' RETRY ')}${white(` ${requestUrl}`)}`);
 										return null;
 									})
 									.then(res => {
@@ -329,6 +342,7 @@ export default async function downode(url, rootPageRule, options) {
 											ensureIsHTMLResponse(requestUrl, res);
 											return res.text();
 										}
+
 										return null;
 									})
 									.then(resText => {
@@ -349,7 +363,7 @@ export default async function downode(url, rootPageRule, options) {
 									.catch(err => {
 										if (err.message.includes('connect EAGAIN') && tryRetry()) {
 											allDone();
-											warnLog(`${bgYellow.black(' RETRY ')}${white(` ${requestUrl}`)}`);
+											warnLog(`${bgYellow.black(' RETRY ')}${white(` URL: "${requestUrl}"`)}`);
 											return;
 										}
 
@@ -360,7 +374,7 @@ export default async function downode(url, rootPageRule, options) {
 										}
 										allDone();
 
-										errorLog(`${bgRed.black(' FAILED ')}${white(` ${requestUrl}\n	${err.message}`)}`);
+										errorLog(`${bgRed.black(' FAILED ')}${white(` URL: "${requestUrl}"\n	${err.message}`)}`);
 									});
 
 								function allDone() {
@@ -385,7 +399,7 @@ export default async function downode(url, rootPageRule, options) {
 							requestUrl,
 						}) => {
 							const newPagePath = index === undefined ? [...pagePath, ruleName] : [...pagePath, `${ruleName}[${index}]`];
-							return globalDone => done => {
+							return (globalDone, isRetry) => done => {
 								if (index === undefined) {
 									ruleData[__URL__] = requestUrl;
 								} else {
@@ -394,11 +408,16 @@ export default async function downode(url, rootPageRule, options) {
 
 								const request = Object.assign({}, setUserAgentAndCookie(fetchOptions), {method: 'GET'});
 
-								infoLog(`${bgGreen.black(' FETCH ')}${white(` ${requestUrl}`)}`);
+								if (isRetry) {
+									warnLog(`${bgYellow.black(' RETRY ')}${white(` URL: "${requestUrl}"`)}`);
+								} else {
+									infoLog(`${bgGreen.black(' FETCH ')}${white(` URL: "${requestUrl}"`)}`);
+								}
+
 								fetch(requestUrl, request)
 									.then(res => {
 										if (res.ok) {
-											infoLog(`${bgGreen.black(' OK ')}${white(` ${requestUrl}`)}`);
+											infoLog(`${bgGreen.black(' OK ')}${white(` URL: "${requestUrl}"`)}`);
 											return res;
 										}
 
@@ -406,7 +425,6 @@ export default async function downode(url, rootPageRule, options) {
 											throw new Error(res.statusText);
 										}
 
-										warnLog(`${bgYellow.black(' RETRY ')}${white(` ${requestUrl}`)}`);
 										return null;
 									})
 									.then(async res => {
@@ -483,14 +501,14 @@ export default async function downode(url, rootPageRule, options) {
 													setRefVar([...pagePath, ruleName], ruleData);
 												}
 											}
-											infoLog(`${bgGreen.black(' SAVED ')}${white(` ${savedPath}`)}`);
+											infoLog(`${bgGreen.black(' SAVED ')}${white(` URL: "${savedPath}"`)}`);
 										}
 									})
 									.then(allDone)
 									.catch(err => {
 										if (err.message.includes('connect EAGAIN') && tryRetry()) {
 											allDone();
-											warnLog(`${bgYellow.black(' RETRY ')}${white(` ${requestUrl}`)}`);
+											warnLog(`${bgYellow.black(' RETRY ')}${white(` URL: "${requestUrl}"`)}`);
 											return;
 										}
 
@@ -524,6 +542,13 @@ export default async function downode(url, rootPageRule, options) {
 			}
 		}
 	});
+
+	async function waitForDone(isRunning) {
+		await sleep(1000);
+		if (retryCount > 0 || isRunning()) {
+			return waitForDone(isRunning);
+		}
+	}
 }
 
 export const waitFor = waitForFunction;
@@ -770,7 +795,7 @@ function processRuleOptions(globalOptions, ruleName, rule) {
 	} else {
 		ensureValueIsNonEmptyObject([`${ruleName}.group`, group]);
 		if (download === undefined && rules === undefined) {
-			warnLog(`${bgYellow.black(' RULE ')}${white(` You have specified ${ruleName}.group without ${ruleName}.download or ${ruleName}.rules`)}`);
+			warnLog(`${bgYellow.black(' IGNORE ')}${white(` RULE: ${ruleName}\n	You have specified group field without download or rules field`)}`);
 		}
 
 		if (group.rate === undefined && group.concurrent === undefined) {
@@ -843,13 +868,6 @@ async function processElementValue($elm, {how, trim, convert}, index, getRefVar)
 	}
 
 	return value;
-}
-
-async function waitForDone(isRunning) {
-	await sleep(1000);
-	if (isRunning()) {
-		return waitForDone(isRunning);
-	}
 }
 
 /**

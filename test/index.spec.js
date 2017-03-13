@@ -435,8 +435,8 @@ describe('Main function', () => {
 
 				const getProperty = propertyOf(result);
 
-				const propertyToMatch = ([path = 'undefined', what]) => {
-					expect(getProperty(path)).toMatch(what);
+				const propertyToMatch = ([path, what]) => {
+					expect(getProperty(path) || 'undefined').toMatch(what);
 				};
 
 				const propertyToBe = ([path, what]) => {
