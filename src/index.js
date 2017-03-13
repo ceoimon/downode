@@ -9,6 +9,7 @@ import {
 } from 'chalk';
 import $ from 'cheerio';
 import debug from 'debug';
+import dnscache from 'dnscache';
 import {decodeHTML} from 'entities';
 import isCallable from 'is-callable';
 import {
@@ -58,6 +59,12 @@ const __URL__ = Symbol('request url');
 export const constant = {
 	__URL__
 };
+
+dnscache({
+	enable: true,
+	ttl: 300,
+	cachesize: 1000
+});
 
 const infoLog = debug('downode:info');
 const warnLog = debug('downode:warn');
