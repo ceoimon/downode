@@ -340,6 +340,12 @@ export default async function downode(url, rootPageRule, options) {
 									})
 									.then(allDone)
 									.catch(err => {
+										if (err.message.includes('connect EAGAIN') && tryRetry()) {
+											allDone();
+											warnLog(`${bgYellow.black(' RETRY ')}${white(` ${requestUrl}`)}`);
+											return;
+										}
+
 										if (index === undefined) {
 											ruleData.ERROR = new Error(`request url(${requestUrl}) failed: ${err.message}`);
 										} else {
