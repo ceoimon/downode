@@ -13,6 +13,8 @@ import {
 	replaceAsync
 } from './utils';
 
+const UNDEFINED = Symbol('undefined');
+
 /**
  * Use to identify Reference Variables waiter.
  */
@@ -41,7 +43,7 @@ export function initRefVar() {
 	 */
 	function clearReferVar() {
 		for (const [key, {value, listeners}] of keys.entries()) {
-			if (value === undefined) {
+			if (value === UNDEFINED) {
 				listeners.forEach(l => l(new Error(`reference variable for path \`${key}\` never get`)));
 			}
 			keys.delete(key);
@@ -268,7 +270,7 @@ export function initRefVar() {
 			const cloneVal = cloneDeep(val);
 			const {listeners, value} = keys.get(pagePath);
 
-			if (value !== undefined) {
+			if (value !== UNDEFINED) {
 				throw new Error(`duplicate reference Page Path is not allow: \`${pagePath}\``);
 			}
 
@@ -296,7 +298,7 @@ export function initRefVar() {
 		if (keys.has(pagePath)) {
 			const {listeners: currentListeners, value} = keys.get(pagePath);
 
-			if (value !== undefined) {
+			if (value !== UNDEFINED) {
 				// make a clone so listener can't change the value.
 				listener(null, cloneDeep(value));
 				return;
@@ -306,7 +308,7 @@ export function initRefVar() {
 			listeners = currentListeners.slice();
 			listeners.push(listener);
 		}
-		keys.set(pagePath, {listeners});
+		keys.set(pagePath, {listeners, value: UNDEFINED});
 
 		// we dont need unsubscribe function.
 		// let isSubscribed = true;
