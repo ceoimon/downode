@@ -12,14 +12,34 @@ npm i -S downode
 
 ## Features
 
-- **Composable** Since downode support nested rule, you can reuse your `Page Rule` / `Rule`.
+- **Composable:** Since downode support nested rule, you can reuse your `Page Rule` / `Rule`.
 
-- **Reference mechanism** You can refer other data easily.
+- **Reference mechanism:** You can refer other data easily.
 
 
-## Usage
+## Examples
 
-**To Write**
+see [Tutorial](./TUTORIAL.md)
+
+## API
+
+*To Write*
+
+## Related
+
+downode is inspired by these projects:
+
+- [scrape-it](https://github.com/IonicaBizau/scrape-it) - Frankly, I actually stole the main ideal from this project.
+- [node-crawler](https://github.com/bda-research/node-crawler) - Concurrent control, Priority queue.
+
+## Roadmap
+
+- [ ] Proxy support
+- [ ] Post shorthand config
+- [ ] Authorization/Cookie propogation
+- [ ] CLI support
+- [ ] Incremental scrape
+- [ ] Dynamic generate data support
 
 ## License
 
