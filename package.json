@@ -69,7 +69,8 @@
           "jest"
         ]
       }
-    ]
+    ],
+    "ignores": ["examples/**"]
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
