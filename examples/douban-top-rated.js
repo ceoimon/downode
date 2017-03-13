@@ -69,8 +69,8 @@ const imdbMoviePosterPageRule = {
 		download: {
 			path: './imdbPoster',
 			extension: 'png',
-			// filename: '{{../titleWitoutSpace}}'
-			filename: '{{../../../title}}' // Chinese title
+			// filename: '{{../titleWitoutSpace}}' // Original title
+			filename: '{{../../title}}' // Chinese title
 		},
 		concurrent: 10,
 	},

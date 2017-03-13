@@ -211,4 +211,4 @@ downode('http://www.imdb.com/chart/top', imdbTopRateMoviesPageRule)
 
 Furthermore you can also scrape Douban Top 250 (豆瓣 Top 250), and also grab the relative IMDb data and poster:
 
-see [example file](./examples/douban-top-rate.js)
+see [example file](./examples/douban-top-rated.js)
