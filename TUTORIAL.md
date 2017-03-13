@@ -78,6 +78,8 @@ downode('http://www.imdb.com/title/tt2771200', imdbMoviePageRule)
 
 Nothing special, right?
 
+## Go deeper
+
 How about download the poster to your hardrive? And we don't want the poster preview thumbnail in the movie page, we need to dig out the real one.
 
 ```js
@@ -138,6 +140,8 @@ downode('http://www.imdb.com/title/tt2771200', imdbMoviePageRuleWithPoster)
 ```
 
 And now you have a high definition poster!
+
+## Scrape them all
 
 But, I can do that manually, why...
 
@@ -202,6 +206,8 @@ downode('http://www.imdb.com/chart/top', imdbTopRateMoviesPageRule)
 		console.log(err);
 	});
 ```
+
+## And...
 
 Furthermore you can also scrape Douban Top 250 (豆瓣 Top 250), and also grab the relative IMDb data and poster:
 
