@@ -373,6 +373,7 @@ describe('Main function', () => {
 			nock('http://ceoimon.com').get('/about').times(3).replyWithFile(200, pathJoin(mockDir, 'about.html'), {'Content-Type': 'text/html'});
 			nock('http://ceoimon.com').get('/index.css').times(3).replyWithFile(200, pathJoin(mockDir, 'index.css'), {'Content-Type': 'text/css'});
 			nock('http://ceoimon.com').get('/script.min.js').times(6).replyWithFile(200, pathJoin(mockDir, 'script.min.js'), {'Content-Type': 'application/javascript'});
+			nock('http://ceoimon.com').get('/invalid.min.js').times(3).replyWithError('reason: connect EAGAIN blahblahblah');
 			nock('http://ceoimon.com').get('/invalid.min.js').times(24).reply(404);
 			nock('http://ceoimon.com').get('/cat.jpg').times(6).replyWithFile(200, pathJoin(mockDir, 'cat.jpg'), {'Content-Type': 'image/jpeg'});
 			nock('http://ceoimon.com').get('/background.png').times(3).replyWithFile(200, pathJoin(mockDir, 'background.jpg'), {'Content-Type': 'image/jpeg'});
