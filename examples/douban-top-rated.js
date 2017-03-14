@@ -97,7 +97,7 @@ const imdbMoviePageRuleWithPoster = Object.assign({}, imdbMoviePageRule, {
 	}
 });
 
-// const imdbTopRateMoviesPageRule = {
+// const imdbTopRatedMoviesPageRule = {
 // 	title: 'title',
 // 	desc: '.byline',
 // 	movies: {
@@ -147,7 +147,7 @@ const doubanMoviePageRule = {
 	}
 };
 
-const doubanTopRateMoviesPageRule = {
+const doubanTopRatedMoviesPageRule = {
 	page: '.thispage',
 	movies: {
 		list: '.hd a',
@@ -157,7 +157,7 @@ const doubanTopRateMoviesPageRule = {
 	}
 };
 
-// downode('http://www.imdb.com/chart/top', imdbTopRateMoviesPageRule)
+// downode('http://www.imdb.com/chart/top', imdbTopRatedMoviesPageRule)
 // 	.then(result => {
 // 		console.log(result);
 // 	})
@@ -171,11 +171,11 @@ downode('https://movie.douban.com/top250', Object.assign({}, {
 	pages: {
 		list: '.paginator a',
 		attr: 'href',
-		rules: doubanTopRateMoviesPageRule,
+		rules: doubanTopRatedMoviesPageRule,
 		group: doubanPageGroup,
 		max: 9
 	}
-}, doubanTopRateMoviesPageRule), {
+}, doubanTopRatedMoviesPageRule), {
 	entryCookie: doubanCookie,
 	totalConcurrent: 100,
 	mode: 'df'
