@@ -14,7 +14,7 @@ npm i -S downode
 
 ## Features
 
-- **Composable:** downode support nested Rule, you can reuse/compose your `Page Rule` / `Rule` arbitrary.
+- **Composable:** downode supports nested Rule, you can reuse/compose your `Page Rule` / `Rule` arbitrarily.
 
 - **Concurrent control:** Control all the network requests with simple config option.
 
@@ -39,7 +39,7 @@ There is a [example](./examples/douban-top-rated-250-movies.js) to scrape Douban
 
 scrape the given URL page with given `Page Rule`
 
-*NOTE: if you're using commonjs module, you need to use `require('downode').default` to get this main function*
+*NOTE: if you're using commonjs module, you'll need to use `require('downode').default` to get this main function*
 
 **Params**
 
@@ -68,9 +68,9 @@ Function overloading:
 - `waitFor(refPathsArray, callback)`
 - `waitFor(refPathsObject, callback)`
 
-Create a `Reference Variable Waiter`. invoke the callback when all `Reference Variables` are available.
+Create a `Reference Variable Waiter`. Invoke the callback when all `Reference Variables` are available.
 
-*To learn more about reference mechanism, head to [reference-mechanism](./docs/reference-mechanism.md)*
+*To learn more about reference mechanism, please head to [reference-mechanism](./docs/reference-mechanism.md)*
 
 **Params**
 
@@ -94,12 +94,12 @@ downode is inspired by these projects:
 
 ## Roadmap
 
-- [ ] Proxy support
-- [ ] Post shorthand config
+- [ ] Proxy Rule Option
+- [ ] Post Rule Option
 - [ ] Authorization/Cookie propogation
 - [ ] CLI support
 - [ ] Incremental scrape
-- [ ] Dynamic generate data support
+- [ ] Dynamic generate website scrape support
 
 
 ## License
