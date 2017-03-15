@@ -191,7 +191,7 @@ aPageRule.key.download = {
 }
 ```
 
-## Advance usage
+## Advanced usage
 
 downode is so simple, but you can still make it powerful through compose different `Page Rules` and `Rules`.
 
