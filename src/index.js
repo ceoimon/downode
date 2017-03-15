@@ -1006,12 +1006,12 @@ async function processElementValue($elm, {how, trim, convert}, index, getRefVar)
  * request queue.
  * @prop {'default'|'df'|'bf'} [mode='default'] - global request queue mode.
  * @prop {number} [rate=0] - Interval for each request in milisecond (within same Rule).
- * @prop {object} [concurrent=5] - Max concurrent request number (within same Rule).
+ * @prop {number} [concurrent=5] - Max concurrent request number (within same Rule).
  * @prop {RequestInit} [request] - option pass to node-fetch.
  * @prop {string|string[]} [userAgents=MOST_COMMON_USER_AGENTS] - Shorthand for
  * specify use one of these user agents (randomly) for User-Agent field in
  * request header.
- * @prop {string} [cookie] - Shorthand for specify cookie for request header.
+ * @prop {string} [entryCookie] - cookie for entry.
  * @prop {number} [retry=3] - Request retry time.
  * @prop {number} [retryTimeout=2000] - Request retry timeout in milisecond.
  */
