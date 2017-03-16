@@ -1,6 +1,6 @@
 ## Rule, the World!
 
-There two "Rule" used in downode: `Rule` and `Page Rule`.
+There are two "Rule" used in downode: `Rule` and `Page Rule`.
 
 `Rules` are what `Page Rules` "made of".
 
