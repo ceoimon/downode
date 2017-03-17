@@ -139,14 +139,15 @@ export default async function downode(url, rootPageRule, options) {
 					ensureValueIsNonEmptyStringOrNonEmptyObject([`Rule: \`${ruleName}\``, rule]);
 
 					await Promise.all(Object.keys(rule).map(key => [key, rule[key]]).filter(([, value]) => value instanceof ReferenceVariableWaiter).map(([key, value]) => processRefVarWaiter(value).then(result => {
-						// dont mutate the orginal rule.
 						rule = Object.assign({}, rule, {
 							[key]: result
 						});
 					})));
 
 					if (rule.attr && isString(rule.attr)) {
-						rule.attr = await processRefVarString(rule.attr);
+						rule = Object.assign({}, rule, {
+							attr: await processRefVarString(rule.attr)
+						});
 					}
 
 					let {
