@@ -83,6 +83,16 @@ Create a `Reference Variable Waiter`. Invoke the callback when all `Reference Va
 
 - **any** - Return what callback return.
 
+## Debug
+
+```bash
+# set environment variable
+export DEBUG=downode:*
+
+# `downode:info` - basic infomation, like request, download.
+# `downode:warn` - retry request, useless rule
+# `downode:error` - error infomation, including request error, download error etc.
+```
 
 ## Related
 
