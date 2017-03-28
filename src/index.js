@@ -855,7 +855,7 @@ function processRuleOptions(globalOptions, ruleName, rule) {
 }
 
 async function processElementValue($elm, {how, trim, convert}, index, getRefVar) {
-	let value = isString(how) ? $elm[how]() : await (async () => how($elm, index, getRefVar))();
+	let value = isString(how) ? $elm[how]() : await how($elm, index, getRefVar);
 
 	if (isString(how)) {
 		value = decodeHTML(value);
@@ -866,7 +866,7 @@ async function processElementValue($elm, {how, trim, convert}, index, getRefVar)
 	}
 
 	if (convert) {
-		value = await (async () => convert(value, index, getRefVar))();
+		value = await convert(value, index, getRefVar);
 	}
 
 	return value;

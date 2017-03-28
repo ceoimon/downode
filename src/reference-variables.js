@@ -151,15 +151,22 @@ export function initRefVar() {
 			// => ["foo/ba", "r[23]/\", "bar\", "foo/", "bar"]
 			// => [["foo", "ba"], ["r[23]", "\"], ["bar\"], ["foo", ""], ["bar"]]
 			// => ["foo", "ba/r[23]", "\/bar\/foo", "/bar"]
-			const paths = refPath.trim().split('\\/').map(s => s.split('/')).reduce((r, s, i) => i === 0 ? [...r, ...s] : r[r.length - 1] === '' ? [...r, `/${s[0]}`, ...s.slice(1)] : [...r.slice(0, -1), r.slice(-1)[0] + `/${s[0]}`, ...s.slice(1)], []).filter(p => p !== '').map(p => {
-				if (p.startsWith('.')) {
-					if (p !== '.'.repeat(p.length)) {
-						throw new Error(`invalid reference path found: expect \`${p}\` not to starts with '.' (you can use '\\\\.' to escape '.')`);
+			const paths = refPath
+				.trim()
+				.split('\\/')
+				.map(s => s.split('/'))
+				.reduce((r, s, i) => i === 0 ? [...r, ...s] : r[r.length - 1] === '' ? [...r, `/${s[0]}`, ...s.slice(1)] : [...r.slice(0, -1), r.slice(-1)[0] + `/${s[0]}`, ...s.slice(1)], [])
+				.filter(p => p !== '')
+				.map(p => {
+					if (p.startsWith('.')) {
+						if (p !== '.'.repeat(p.length)) {
+							throw new Error(`invalid reference path found: expect \`${p}\` not to starts with '.' (you can use '\\\\.' to escape '.')`);
+						}
+						return p.slice((p.length & 1) === 0 ? 0 : 1);
 					}
-					return p.slice((p.length & 1) === 0 ? 0 : 1);
-				}
-				return p;
-			}).filter(p => p !== '');
+					return p;
+				})
+				.filter(p => p !== '');
 
 			for (const originalP of paths) {
 				let p = originalP;
